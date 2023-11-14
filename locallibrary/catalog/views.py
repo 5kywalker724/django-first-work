@@ -22,3 +22,11 @@ class BookDetailView(generic.DetailView):
     paginate_by = 10
 
 
+class AuthorListView(generic.ListView):
+    model = Author
+
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
+
