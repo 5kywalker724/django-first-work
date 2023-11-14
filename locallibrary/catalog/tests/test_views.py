@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 User = get_user_model()
 
@@ -257,3 +258,19 @@ class RenewBookInstancesViewTest(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertFormError(response.context['form'], 'renewal_date',
                                  'Invalid date - renewal more than 4 weeks ahead')
+
+
+class AuthorCreateViewTest(TestCase):
+
+    def setUp(self):
+        test_user = User.objects.create_user(
+            username='test_user', password='some_password')
+
+        content_typeAuthor = ContentType.objects.get_for_model(Author)
+        permAddAuthor = Permission.objects.get(
+            codename="add_author",
+            content_type=content_typeAuthor,
+        )
+
+        test_user.user_permissions.add(permAddAuthor)
+        test_user.save()
